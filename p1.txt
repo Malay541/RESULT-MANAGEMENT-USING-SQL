@@ -1,0 +1,401 @@
+mysql> use online_exam;
+Database changed
+mysql> show tables;
+Empty set (0.07 sec)
+
+mysql> create table exam_subject(
+    -> subject_ID int primary key,
+    -> subject_name varchar(30) not null);
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> create table student_reg(
+    -> user_ID int primary key,
+    -> f_name varchar(30) not null,
+    -> age int,
+    -> l_name varchar(30) not null,
+    -> subject_ID int,
+    -> check(age>=18),
+    -> foreign key(subject_ID) references exam_subject(subject_ID));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table student_detail(
+    -> enroll_no int primary key,
+    -> user_ID int,
+    -> password varchar(30) not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 4
+mysql> password varchar(30) not null,
+    -> foreign key(user_ID) references student_reg(user_ID));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'password varchar(30) not null,
+foreign key(user_ID) references student_reg(user_' at line 1
+mysql> desc  student_detail;
+ERROR 1146 (42S02): Table 'online_exam.student_detail' doesn't exist
+mysql> 
+mysql> 
+mysql> create table student_detail(
+    -> enroll_no int primary key,
+    -> user_ID int,
+    -> password varchar(30) not null,
+    -> foreign key (user_ID) references student_reg(user_ID));
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> create table exam_result(
+    -> enroll_no int,
+    -> subject_ID int,
+    -> name varchar(30) not null,
+    -> marks int not null,
+    -> foreign key (enroll_no) references student_detail(enroll_no),
+    -> foreign key (subject_ID) references exam_subject(subject_ID));
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> insert into exam_subject values(7111,"DBMS");
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into exam_subject values(7221,"EITK");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_subject values(7331,"P.L");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_subject values(7441,"PEM");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into exam_subject values(7551,"TCS");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_reg values(5125,"Malay",19,"Bhadane",7111);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into student_reg values(5127,"Malay",19,"Bhadane",7211);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`online_exam`.`student_reg`, CONSTRAINT `student_reg_ibfk_1` FOREIGN KEY (`subject_ID`) REFERENCES `exam_subject` (`subject_ID`))
+mysql> insert into student_reg values(5127,"Malay",19,"Bhadane",7221);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_reg values(5130,"Shreyansh",19,"Sohane",7331);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_reg values(5132,"Shreyansh",19,"Sohane",7441);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_reg values(5154,"Dhruv",19,"Gupta",7441);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_reg values(5263,"Dhruv",19,"Gupta",7551);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_reg values(5263,"Dhruv",19,"Gupta",7221);
+ERROR 1062 (23000): Duplicate entry '5263' for key 'student_reg.PRIMARY'
+mysql> insert into student_reg values(5159,"Dhruv",19,"Gupta",7221);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_reg values(5112,"Anagh",18,"Purkar",7111);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student_reg values(5215,"Anagh",18,"Purkar",7331);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_detail values(704013,5159,"Dhruv111");
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into student_detail values(705013,5263,"Dhruv@111");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_detail values(705215,5125,"malay541");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student_detail values(705220,5132,"sheya000");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student_detail values(705325,5154,"dhruva@011");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_detail values(705422,5127,"malay@222");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_detail values(705526,5130,"shreyansh#12");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_detail values(705671,5112,"anagh211");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_detail values(705680,5215,"anagh@321");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_result values(704013,7221,"Dhruv",88);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into exam_result values(705013,7551,"Dhruv",80);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_result values(705215,7111,"Malay",94);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_result values(705220,7441,"Shreyansh",68);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_result values(705325,7441,"Dhruv",78);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_result values(705422,7221,"Malay",60);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_result values(705526,7331,"Shreyansh",50);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_result values(705671,7111,"Anagh",65);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into exam_result values(705680,7331,"Anagh",60);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> 
+mysql> 
+mysql> select * from exam_subject;
++------------+--------------+
+| subject_ID | subject_name |
++------------+--------------+
+|       7111 | DBMS         |
+|       7221 | EITK         |
+|       7331 | P.L          |
+|       7441 | PEM          |
+|       7551 | TCS          |
++------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from student_reg;
++---------+-----------+------+---------+------------+
+| user_ID | f_name    | age  | l_name  | subject_ID |
++---------+-----------+------+---------+------------+
+|    5112 | Anagh     |   18 | Purkar  |       7111 |
+|    5125 | Malay     |   19 | Bhadane |       7111 |
+|    5127 | Malay     |   19 | Bhadane |       7221 |
+|    5130 | Shreyansh |   19 | Sohane  |       7331 |
+|    5132 | Shreyansh |   19 | Sohane  |       7441 |
+|    5154 | Dhruv     |   19 | Gupta   |       7441 |
+|    5159 | Dhruv     |   19 | Gupta   |       7221 |
+|    5215 | Anagh     |   18 | Purkar  |       7331 |
+|    5263 | Dhruv     |   19 | Gupta   |       7551 |
++---------+-----------+------+---------+------------+
+9 rows in set (0.01 sec)
+
+mysql> select * from student_detail;
++-----------+---------+--------------+
+| enroll_no | user_ID | password     |
++-----------+---------+--------------+
+|    704013 |    5159 | Dhruv111     |
+|    705013 |    5263 | Dhruv@111    |
+|    705215 |    5125 | malay541     |
+|    705220 |    5132 | sheya000     |
+|    705325 |    5154 | dhruva@011   |
+|    705422 |    5127 | malay@222    |
+|    705526 |    5130 | shreyansh#12 |
+|    705671 |    5112 | anagh211     |
+|    705680 |    5215 | anagh@321    |
++-----------+---------+--------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from exam_result;
++-----------+------------+-----------+-------+
+| enroll_no | subject_ID | name      | marks |
++-----------+------------+-----------+-------+
+|    704013 |       7221 | Dhruv     |    88 |
+|    705013 |       7551 | Dhruv     |    80 |
+|    705215 |       7111 | Malay     |    94 |
+|    705220 |       7441 | Shreyansh |    68 |
+|    705325 |       7441 | Dhruv     |    78 |
+|    705422 |       7221 | Malay     |    60 |
+|    705526 |       7331 | Shreyansh |    50 |
+|    705671 |       7111 | Anagh     |    65 |
+|    705680 |       7331 | Anagh     |    60 |
++-----------+------------+-----------+-------+
+9 rows in set (0.00 sec)
+
+mysql> /* que.1 */
+mysql> select * from student_reg where subject_ID=(select subject_ID from exam_subject where subject_name="TCS");
++---------+--------+------+--------+------------+
+| user_ID | f_name | age  | l_name | subject_ID |
++---------+--------+------+--------+------------+
+|    5263 | Dhruv  |   19 | Gupta  |       7551 |
++---------+--------+------+--------+------------+
+1 row in set (0.00 sec)
+
+mysql> /* que.2 */
+mysql> select * from student_reg where subject_ID=(select subject_ID from exam_subject where subject_name="PEM");
++---------+-----------+------+--------+------------+
+| user_ID | f_name    | age  | l_name | subject_ID |
++---------+-----------+------+--------+------------+
+|    5132 | Shreyansh |   19 | Sohane |       7441 |
+|    5154 | Dhruv     |   19 | Gupta  |       7441 |
++---------+-----------+------+--------+------------+
+2 rows in set (0.00 sec)
+
+mysql> /* que.3 */
+mysql> select * from student_reg where subject_ID=(select subject_ID from exam_subject where subject_name="P.L");
++---------+-----------+------+--------+------------+
+| user_ID | f_name    | age  | l_name | subject_ID |
++---------+-----------+------+--------+------------+
+|    5130 | Shreyansh |   19 | Sohane |       7331 |
+|    5215 | Anagh     |   18 | Purkar |       7331 |
++---------+-----------+------+--------+------------+
+2 rows in set (0.00 sec)
+
+mysql> /* que.4 */
+mysql> select * from student_reg where subject_ID=(select subject_ID from exam_subject where subject_name="DBMS");
++---------+--------+------+---------+------------+
+| user_ID | f_name | age  | l_name  | subject_ID |
++---------+--------+------+---------+------------+
+|    5112 | Anagh  |   18 | Purkar  |       7111 |
+|    5125 | Malay  |   19 | Bhadane |       7111 |
++---------+--------+------+---------+------------+
+2 rows in set (0.00 sec)
+
+mysql> /* que.5 */
+mysql> select * from student_reg where subject_ID=(select subject_ID from exam_subject where subject_name="EITK");
++---------+--------+------+---------+------------+
+| user_ID | f_name | age  | l_name  | subject_ID |
++---------+--------+------+---------+------------+
+|    5127 | Malay  |   19 | Bhadane |       7221 |
+|    5159 | Dhruv  |   19 | Gupta   |       7221 |
++---------+--------+------+---------+------------+
+2 rows in set (0.00 sec)
+
+mysql> /* que.3 */
+mysql> select * from exam_result
+    -> where marks=(select max(marks) from exam_result where subject_ID=(select subject_ID from exam_subject where subject_name="P.L"));
++-----------+------------+-------+-------+
+| enroll_no | subject_ID | name  | marks |
++-----------+------------+-------+-------+
+|    705422 |       7221 | Malay |    60 |
+|    705680 |       7331 | Anagh |    60 |
++-----------+------------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> where marks=(select max(marks) from exam_result where subject_ID=(select subject_ID from exam_subject where subject_name="DBMS"));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where marks=(select max(marks) from exam_result where subject_ID=(select subject' at line 1
+mysql> select * from exam_result
+    -> where marks=(select max(marks) from exam_result where subject_ID=(select subject_ID from exam_subject where subject_name="DBMS"));
++-----------+------------+-------+-------+
+| enroll_no | subject_ID | name  | marks |
++-----------+------------+-------+-------+
+|    705215 |       7111 | Malay |    94 |
++-----------+------------+-------+-------+
+1 row in set (0.00 sec)
+
+mysql> /* que.5 */
+mysql> select * from exam_result
+    -> where marks=(select min(marks) from exam_result where subject_ID=(select subject_ID from exam_subject where subject_name="EITK"));
++-----------+------------+-------+-------+
+| enroll_no | subject_ID | name  | marks |
++-----------+------------+-------+-------+
+|    705422 |       7221 | Malay |    60 |
+|    705680 |       7331 | Anagh |    60 |
++-----------+------------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> /* que.6 */
+mysql> select * from exam_result
+    -> where marks=(select min(marks) from exam_result where subject_ID=(select subject_ID from exam_subject where subject_name="PEM"));
++-----------+------------+-----------+-------+
+| enroll_no | subject_ID | name      | marks |
++-----------+------------+-----------+-------+
+|    705220 |       7441 | Shreyansh |    68 |
++-----------+------------+-----------+-------+
+1 row in set (0.00 sec)
+
+mysql> /* que.7 */
+mysql> delete from exam_result where marks=60 and subject_ID=(select subject_ID from exam_subject where subject_name="TCS");
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from exam_result;
++-----------+------------+-----------+-------+
+| enroll_no | subject_ID | name      | marks |
++-----------+------------+-----------+-------+
+|    704013 |       7221 | Dhruv     |    88 |
+|    705013 |       7551 | Dhruv     |    80 |
+|    705215 |       7111 | Malay     |    94 |
+|    705220 |       7441 | Shreyansh |    68 |
+|    705325 |       7441 | Dhruv     |    78 |
+|    705422 |       7221 | Malay     |    60 |
+|    705526 |       7331 | Shreyansh |    50 |
+|    705671 |       7111 | Anagh     |    65 |
+|    705680 |       7331 | Anagh     |    60 |
++-----------+------------+-----------+-------+
+9 rows in set (0.00 sec)
+
+mysql> /* que.8 */
+mysql> select * from student_reg where subject_ID not in (select subject_ID from exam_subject where subject_name in ("PEM","DBMS"));
++---------+-----------+------+---------+------------+
+| user_ID | f_name    | age  | l_name  | subject_ID |
++---------+-----------+------+---------+------------+
+|    5127 | Malay     |   19 | Bhadane |       7221 |
+|    5130 | Shreyansh |   19 | Sohane  |       7331 |
+|    5159 | Dhruv     |   19 | Gupta   |       7221 |
+|    5215 | Anagh     |   18 | Purkar  |       7331 |
+|    5263 | Dhruv     |   19 | Gupta   |       7551 |
++---------+-----------+------+---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> /* que.9 */
+mysql> select * from exam_result where subject_ID=(select subject_ID from exam_subject where subject_name="EITK");
++-----------+------------+-------+-------+
+| enroll_no | subject_ID | name  | marks |
++-----------+------------+-------+-------+
+|    704013 |       7221 | Dhruv |    88 |
+|    705422 |       7221 | Malay |    60 |
++-----------+------------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> /* que.10 */
+mysql> select enroll_no,password from student_detail where user_ID=(select user_ID from student_reg where f_name="Malay"
+    -> and subject_ID=(select subject_ID from exam_subject where subject_name="DBMS"));
++-----------+----------+
+| enroll_no | password |
++-----------+----------+
+|    705215 | malay541 |
++-----------+----------+
+1 row in set (0.01 sec)
+
+mysql> /* que.11 */
+mysql> select * from student_reg where user_ID=(select user_ID from student_detail
+    -> where enroll_no in (select enroll_no fromm exam_result where name like "sh" and marks>60 ));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'exam_result where name like "sh" and marks>60 ))' at line 2
+mysql> 
+mysql> select * from student_reg where user_ID=(select user_ID from student_detail
+    -> where enroll_no in (select enroll_no from exam_result where name like "sh" and marks>60 ));
+Empty set (0.00 sec)
+
+mysql> select * from student_reg where user_ID=(select user_ID from student_detail
+    -> where enroll_no in (select enroll_no from exam_result where name like "Sh" and marks>60 ));
+Empty set (0.00 sec)
+
+mysql> select * from student_reg where user_ID=(select user_ID from student_detail
+    -> where enroll_no in (select enroll_no from exam_result where name like "sh%" and marks>60 ));
++---------+-----------+------+--------+------------+
+| user_ID | f_name    | age  | l_name | subject_ID |
++---------+-----------+------+--------+------------+
+|    5132 | Shreyansh |   19 | Sohane |       7441 |
++---------+-----------+------+--------+------------+
+1 row in set (0.00 sec)
+
+mysql> /* que.12 */
+mysql> select * from exam_result where enroll_no in (select enroll_no from student_detail
+    -> where iser_ID in(select user_ID from student_reg  where age = 19));
+ERROR 1054 (42S22): Unknown column 'iser_ID' in 'IN/ALL/ANY subquery'
+mysql> select * from exam_result where enroll_no in (select enroll_no from student_detail
+    -> where user_ID in(select user_ID from student_reg  where age = 19));
++-----------+------------+-----------+-------+
+| enroll_no | subject_ID | name      | marks |
++-----------+------------+-----------+-------+
+|    705215 |       7111 | Malay     |    94 |
+|    705422 |       7221 | Malay     |    60 |
+|    705526 |       7331 | Shreyansh |    50 |
+|    705220 |       7441 | Shreyansh |    68 |
+|    705325 |       7441 | Dhruv     |    78 |
+|    704013 |       7221 | Dhruv     |    88 |
+|    705013 |       7551 | Dhruv     |    80 |
++-----------+------------+-----------+-------+
+7 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> Terminal close -- exit!
